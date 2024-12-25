@@ -1,0 +1,91 @@
+package gamequest;
+import java.util.Scanner;
+
+public class AdventureQuest {
+    
+    //main method for Hero class
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.println("Welcome to Adventure Quest! Let's create your hero.");
+
+        // Input for hero creation
+        System.out.print("\nEnter your hero's name: ");
+        String heroName = s.nextLine(); // Renamed to heroName
+        System.out.print("Enter your hero's HP (50-200): ");
+        int hp = s.nextInt();
+        System.out.print("Enter your hero's attack power (5-30): ");
+        int attack = s.nextInt();
+
+        // Create Hero, Player, and DungeonMap objects
+        Hero hero = new Hero(heroName, hp, attack); // Now using heroName
+        Player player = new Player(10, 10, hero);
+        DungeonMap dungeon = new DungeonMap(10, 10);
+        
+        hero.displayStatus();
+        
+        //battle begins
+        System.out.println("\n-----Let the battle begin!-----");
+        
+        //display final status
+        hero.displayStatus();
+        
+        System.out.println("--------------------");
+
+        while (player.isAlive()) {
+            dungeon.printDungeon(player.position);
+            System.out.print("Move (w/a/s/d) or quit (q): ");
+            char move = s.next().charAt(0);
+
+            if (move == 'q') {
+                System.out.println("You have chosen to quit the game. Goodbye!");
+                break;
+            }
+
+            player.move(move, dungeon);
+            char currentRoom = dungeon.map[player.position];
+
+            if (currentRoom == 'T') {
+                System.out.println("You found a treasure!");
+                dungeon.map[player.position] = '.';
+            } else if (currentRoom == 'M') {
+                System.out.println("A monster appears!");
+                Monster monster = new Monster(50, 15);
+
+                // Combat loop
+                while (monster.isAlive() && player.isAlive()) {
+                    System.out.print("Choose action: [a]ttack, [d]efend: ");
+                    char action = s.next().charAt(0);
+
+                    if (action == 'a') {
+                        player.attack(monster);
+                    } else if (action == 'd') {
+                        System.out.println("You defend yourself!");
+                        player.takeDamage(monster.getAttackPower() / 2);
+                    } else {
+                        System.out.println("Invalid action. The monster attacks!");
+                    }
+
+                    if (monster.isAlive()) {
+                        monster.attack(player);
+                    }
+                }
+
+                if (!monster.isAlive()) {
+                    System.out.println("You defeated the monster!");
+                    dungeon.map[player.position] = '.';
+                }
+            } else if (currentRoom == 'B') {
+                System.out.println("You reached the boss room! Prepare for battle!");
+                // Boss fight logic can be added here
+                break;
+            }
+        }
+
+        if (!player.isAlive()) {
+            System.out.println("Game over. Better luck next time!");
+        }
+
+        s.close();
+    }
+}
