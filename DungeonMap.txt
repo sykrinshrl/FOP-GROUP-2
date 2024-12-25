@@ -1,0 +1,50 @@
+package gamequest;
+
+class DungeonMap {
+    char[] map;
+    int width, height;
+
+    public DungeonMap (int width, int height) {
+        this.width = width;
+        this.height = height;
+        map = new char[width * height];
+        generateDungeon();
+    }
+
+    // Generate the dungeon layout
+    private void generateDungeon() {
+        for (int i = 0; i < map.length; i++) {
+            double randomValue = Math.random();
+            if (randomValue > 0.85) {
+                map[i] = 'T'; // Treasure
+            } else if (randomValue > 0.7) {
+                map[i] = '#'; // Wall
+            } else if (randomValue > 0.6) {
+            map[i] = 'M';
+            } else {
+                map[i] = '.'; // Open space
+            }
+        }
+        map[0] = 'P'; // Player starts at the first cell
+        map[map.length - 1] = 'B'; // Boss room
+    }
+
+    // Print the dungeon in a grid format
+    public void printDungeon(int playerPosition) {
+        for (int i = 0; i < map.length; i++) {
+            if (i == playerPosition) {
+                System.out.print("P "); // Show player position
+            } else {
+                System.out.print(map[i] + " ");
+            }
+            if ((i + 1) % width == 0) {
+                System.out.println(); // New line at the end of each row
+            }
+        }
+    }
+
+    // Check if a position is valid (not a wall)
+    public boolean isAccessible(int position) {
+        return map[position] != '#';
+    }
+}
