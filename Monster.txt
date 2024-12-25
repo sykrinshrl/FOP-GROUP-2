@@ -1,0 +1,33 @@
+package gamequest;
+
+class Monster {
+    int health;
+    int attackPower;
+
+    public Monster(int health, int attackPower) {
+        this.health = health;
+        this.attackPower = attackPower;
+    }
+    
+    public int getHealth() {
+        return health;
+    }
+
+    public int getAttackPower() {
+        return attackPower;
+    }
+
+    public void attack(Player player) {
+        System.out.println("The monster attacks you!");
+        player.takeDamage(attackPower);
+    }
+
+    public void takeDamage(int attackPower) {
+        health = Math.max(health - attackPower, 0); // Ensure health does not go below 0
+        System.out.println("The monster takes " + attackPower + " damage. Monster health: " + health);
+    }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+}
