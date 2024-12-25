@@ -1,0 +1,80 @@
+package.gamequest;
+
+class Hero {
+    private String name;
+    private int HP;
+    private int attackPower;
+    
+    //constructor with arguments
+    public Hero(String name, int HP, int attackPower){
+        this.name = name;
+        this.HP = HP;
+        this.attackPower = attackPower;
+    }
+    
+    public String getName(){
+        return name;
+    }
+    
+    public int getHP (){
+        return HP;
+    }
+    
+    public int getAttackPower(){
+        return attackPower;
+    } 
+    
+     //method to display hero's status
+    public void displayStatus(){
+        System.out.println("\n-----Hero's Status-----");
+        System.out.println("Hero: " + this.name);
+        System.out.println("HP: " + this.HP);
+        System.out.println("Attack Power: " + this.attackPower);
+    }   
+}
+
+class Player {
+    int position;
+    int width;
+    Hero hero;
+
+    public Player(int width, int height, Hero hero) {
+        this.position = 0; // Start at the top-left corner
+        this.width = width;
+        this.hero = hero;
+    }
+
+    public void move(char direction, DungeonMap dungeon) {
+        int newPosition = position;
+
+        switch (direction) {
+            case 'w': if (position >= width) newPosition -= width; break;
+            case 's': if (position + width < dungeon.map.length) newPosition += width; break;
+            case 'a': if (position % width != 0) newPosition -= 1; break;
+            case 'd': if ((position + 1) % width != 0) newPosition += 1; break;
+            default: System.out.println("Invalid move. Use w/a/s/d."); return;
+        }
+
+        if (dungeon.isAccessible(newPosition)) {
+            dungeon.map[position] = '.'; // Clear previous position
+            position = newPosition;
+        } else {
+            System.out.println("You hit a wall!");
+        }
+    }
+
+    public void attack(Monster monster) {
+        System.out.println("You attack the monster!");
+        monster.takeDamage(hero.getAttackPower());
+    }
+
+    public void takeDamage(int damage) {
+        int newHP = hero.getHP() - damage;
+        hero = new Hero(hero.getName(), Math.max(newHP, 0), hero.getAttackPower()); // Update hero's HP
+        System.out.println("You take " + damage + " damage. Current health: " + hero.getHP());
+    }
+
+    public boolean isAlive() {
+        return hero.getHP() > 0;
+    }
+}
