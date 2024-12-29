@@ -87,5 +87,25 @@ public class AdventureQuest {
         }
 
         s.close();
+
+        // Create an inventory with 5 slots
+        Inventory inventory = new Inventory(5);
+
+        // Create some items
+        Item potion = new Item("Potion", "Restores 20 HP");
+        Item sword = new Item("Sword", "Increases attack power by 10");
+
+        // Add items to inventory
+        inventory.addItem(potion);
+        inventory.addItem(sword);
+
+        // Display inventory
+        inventory.displayInventory();
+
+        // Remove an item
+        inventory.removeItem("Potion");
+
+        // Display inventory again
+        inventory.displayInventory();
     }
 }
