@@ -1,0 +1,108 @@
+package gamequest
+
+// Represents the Hero character
+public class Hero {
+    private String name;
+    private int hp;
+    private int attackPower;
+
+    // Constructor
+    public Hero(String name, int hp, int attackPower) {
+        this.name = name;
+        this.hp = hp;
+        this.attackPower = attackPower;
+    }
+
+    // Attack the monster
+    public void attack(Monster monster) {
+        System.out.println(name + " attacks " + monster.getType() + " for " + attackPower + " damage.");
+        monster.takeDamage(attackPower);
+    }
+
+    // Take damage from a monster
+    public void takeDamage(int damage) {
+        hp -= damage;
+        System.out.println(name + " takes " + damage + " damage. Remaining HP: " + hp);
+    }
+
+    // Check if the hero is still alive
+    public boolean isAlive() {
+        return hp > 0;
+    }
+
+    // Display hero stats
+    public void displayStats() {
+        System.out.println("Hero Stats: \nName: " + name + "\nHP: " + hp + "\nAttack Power: " + attackPower);
+    }
+}
+
+// Represents the Monster character
+public class Monster {
+    private String type;
+    private int hp;
+    private int attackPower;
+
+    // Constructor
+    public Monster(String type, int hp, int attackPower) {
+        this.type = type;
+        this.hp = hp;
+        this.attackPower = attackPower;
+    }
+
+    // Attack the hero
+    public void attack(Hero hero) {
+        System.out.println(type + " attacks " + hero.getName() + " for " + attackPower + " damage.");
+        hero.takeDamage(attackPower);
+    }
+
+    // Take damage from the hero
+    public void takeDamage(int damage) {
+        hp -= damage;
+        System.out.println(type + " takes " + damage + " damage. Remaining HP: " + hp);
+    }
+
+    // Check if the monster is still alive
+    public boolean isAlive() {
+        return hp > 0;
+    }
+
+    // Display monster stats
+    public void displayStats() {
+        System.out.println("Monster Stats: \nType: " + type + "\nHP: " + hp + "\nAttack Power: " + attackPower);
+    }
+
+    public String getType() {
+        return type;
+    }
+}
+
+// Manages the turn-based battle
+public class BattleSystem {
+    public static void startBattle(Hero hero, Monster monster) {
+        System.out.println("======================");
+        System.out.println("A wild " + monster.getType() + " appears!");
+        System.out.println("======================");
+
+        // Display initial stats
+        hero.displayStats();
+        monster.displayStats();
+
+        System.out.println("\nThe battle begins!");
+
+        // Battle loop
+        while (hero.isAlive() && monster.isAlive()) {
+            System.out.println("\n-- " + hero.getName() + "'s Turn --");
+            hero.attack(monster);
+            if (!monster.isAlive()) {
+                System.out.println("\nThe monster is defeated! You win!");
+                break;
+            }
+
+            System.out.println("\n-- " + monster.getType() + "'s Turn --");
+            monster.attack(hero);
+            if (!hero.isAlive()) {
+                System.out.println("\nYou have been defeated. Game over.");
+            }
+        }
+    }
+}
