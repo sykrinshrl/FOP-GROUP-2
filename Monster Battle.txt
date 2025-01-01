@@ -1,4 +1,4 @@
-package gamequest
+package gamequest;
 
 // Represents the Hero character
 public class Hero {
